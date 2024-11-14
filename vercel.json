@@ -1,0 +1,6 @@
+{
+    "rewrites": [
+      { "source": "/save_ip", "destination": "/api/save_ip" }
+    ]
+  }
+  

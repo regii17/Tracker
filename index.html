@@ -2,49 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPS Location</title>
+    <title>Track IP Address</title>
 </head>
 <body>
-    <script>
-        // Fungsi ini akan dipanggil ketika halaman dimuat
-        window.onload = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendPosition, showError);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        };
-
-        function sendPosition(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            const timestamp = new Date().toISOString(); // Menyimpan waktu akses dalam format ISO
-
-            // Kirim data ke server Flask
-            fetch('https://tracker-eta-ten.vercel.app/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    latitude: latitude, 
-                    longitude: longitude,
-                    timestamp: timestamp 
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data sent successfully:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-
-        function showError(error) {
-            console.error("Error in retrieving location:", error);
-        }
-    </script>
+    <h1>Klik link berikut untuk menyimpan IP Anda</h1>
+    <a href="/save_ip" target="_blank">Klik di sini</a>
 </body>
 </html>
